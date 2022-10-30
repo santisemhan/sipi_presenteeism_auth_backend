@@ -1,11 +1,11 @@
-﻿namespace SIPI_PRESENTEEISM.Core.Integrations
+﻿namespace SIPI_PRESENTEEISM.Core.Integrations.Azure
 {
     using Microsoft.Azure.CognitiveServices.Vision.Face;
     using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
     using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
     using System;
 
-    public class AzureFaceRecognition : IAzureFaceRecognition
+    public class AzureFaceRecognition : IFaceRecognition
     {
         private IFaceClient client;
 
@@ -17,8 +17,9 @@
             var endpoint = configuration.GetValue<string>("Azure:FaceAPI:ENDPOINT");
             PersonGroupId = configuration.GetValue<string>("Azure:FaceAPI:PersonGroupId");
 
-            client = new FaceClient(new ApiKeyServiceClientCredentials(key)) { 
-                Endpoint = endpoint 
+            client = new FaceClient(new ApiKeyServiceClientCredentials(key))
+            {
+                Endpoint = endpoint
             };
         }
 
@@ -31,13 +32,13 @@
                 personGroup = await client.PersonGroup.GetAsync(PersonGroupId);
             }
 
-            if (personGroup is null) 
+            if (personGroup is null)
                 throw new Exception("Person Group not exists");
 
             foreach (var image in images)
             {
-                var detectedFaces = await client.Face.DetectWithStreamAsync(image, 
-                    recognitionModel: RecognitionModel.Recognition04, 
+                var detectedFaces = await client.Face.DetectWithStreamAsync(image,
+                    recognitionModel: RecognitionModel.Recognition04,
                     detectionModel: DetectionModel.Detection03,
                     returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.QualityForRecognition });
 
@@ -49,7 +50,7 @@
 
                 var faceQuality = detectedFaces.First().FaceAttributes.QualityForRecognition.Value;
                 if (faceQuality == QualityForRecognition.Low)
-                    throw new Exception("Some image have low quality");          
+                    throw new Exception("Some image have low quality");
             }
 
             foreach (var image in images)
@@ -62,9 +63,9 @@
 
         public async Task<bool> Identify(Guid userId, Stream image)
         {
-            var detectedFaces = await client.Face.DetectWithStreamAsync(image, 
-                recognitionModel: RecognitionModel.Recognition04, 
-                detectionModel: DetectionModel.Detection03, 
+            var detectedFaces = await client.Face.DetectWithStreamAsync(image,
+                recognitionModel: RecognitionModel.Recognition04,
+                detectionModel: DetectionModel.Detection03,
                 returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.QualityForRecognition });
 
             if (detectedFaces.Count == 0)

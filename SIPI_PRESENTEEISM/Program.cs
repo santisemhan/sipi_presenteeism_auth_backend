@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using SIPI_PRESENTEEISM.Core.Integrations;
+using SIPI_PRESENTEEISM.Core.Helpers.Middleware;
+using SIPI_PRESENTEEISM.Core.Integrations.Azure;
 using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
 using SIPI_PRESENTEEISM.Core.Repositories;
 using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
@@ -36,7 +37,7 @@ services.AddScoped<IStamentRepository, StamentRepository>();
 services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 // Integrations
-services.AddScoped<IAzureFaceRecognition, AzureFaceRecognition>();
+services.AddScoped<IFaceRecognition, AzureFaceRecognition>();
 
 services.AddEndpointsApiExplorer();
 
@@ -74,6 +75,8 @@ services.AddCors(options =>
 
 var app = builder.Build();
 var environment = app.Environment;
+
+app.UseMiddleware<ExceptionHandler>();
 
 // Configure the HTTP request pipeline.
 // Configure the HTTP request pipeline.

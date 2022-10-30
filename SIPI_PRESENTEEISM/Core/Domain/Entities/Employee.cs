@@ -16,6 +16,8 @@
         public string Email { get; set; }
 
         public EmployeeState State { get; set; }
+
+        public List<string> ImagesToIdentify { get; set; }
     }
 
     public enum EmployeeState

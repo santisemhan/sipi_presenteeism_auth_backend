@@ -1,6 +1,6 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Integrations.Interfaces
 {
-    public interface IAzureFaceRecognition
+    public interface IFaceRecognition
     {
         Task AddPerson(Guid userId, List<Stream> images);
 

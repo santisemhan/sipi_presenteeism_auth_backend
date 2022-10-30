@@ -12,14 +12,16 @@
     {
         private readonly IStamentRepository _stamentRepository;
 
-        private readonly IAzureFaceRecognition _azureFaceRecognition;
+        private readonly IFaceRecognition _faceRecognition;
+        private readonly IStorage _storage;
 
         private readonly IEmployeeRepository _employeeRepository;
 
-        public CognitiveService(IStamentRepository stamentRepository, IAzureFaceRecognition azureFaceRecognition, IEmployeeRepository employeeRepository)
+        public CognitiveService(IStamentRepository stamentRepository, IFaceRecognition faceRecognition, IStorage storage, IEmployeeRepository employeeRepository)
         {
-            _stamentRepository = stamentRepository; 
-            _azureFaceRecognition = azureFaceRecognition;
+            _stamentRepository = stamentRepository;
+            _faceRecognition = faceRecognition;
+            _storage = storage;
             _employeeRepository = employeeRepository;
         }
 
@@ -31,15 +33,22 @@
             if (employee == null)
                 throw new Exception("Employee not found");
 
-            await _azureFaceRecognition.AddPerson(Guid.Parse(userId), images);
+            await _faceRecognition.AddPerson(Guid.Parse(userId), images);
 
             employee.State = EmployeeState.To_Admin_Validation;
+
+            foreach (var image in images)
+            {
+                var imageURL = await _storage.UploadStream(image, Guid.Parse(userId));
+                employee.ImagesToIdentify.Add(imageURL);
+            }
+
             await _stamentRepository.SaveChanges();
         }
 
         public async Task<bool> IdentifyUser(string userId, Stream image)
-        {
-            return await _azureFaceRecognition.Identify(Guid.Parse(userId), image);
+        {         
+            return await _faceRecognition.Identify(Guid.Parse(userId), image);
         }
     }
 }
