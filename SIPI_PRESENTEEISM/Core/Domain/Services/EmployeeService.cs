@@ -2,6 +2,7 @@
 {
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
     using SIPI_PRESENTEEISM.Core.Domain.Entities;
+    using SIPI_PRESENTEEISM.Core.Domain.Enums;
     using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
     using System.Threading.Tasks;
@@ -71,6 +72,16 @@
             employees.ForEach(e => result.Add(new EmployeeToListDTO(e)));
 
             return result;
+        }
+
+        public async Task ValidateEmployee(Guid userId, bool byEmployee)
+        {
+            var employee = await _employeeRepository.FindEmployee(e => e.Id == userId);
+
+            if (employee == null)
+                throw new Exception("Employee not found");
+
+            employee.State = byEmployee ? EmployeeState.To_Admin_Validation : EmployeeState.Validated;
         }
     }
 }

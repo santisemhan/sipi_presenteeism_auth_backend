@@ -44,5 +44,13 @@
             var result = await _employeeService.GetAllEmployees();
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("validate")]
+        public async Task<IActionResult> ValidateEmployee(Guid userId, bool byEmployee)
+        {
+            await _employeeService.ValidateEmployee(userId, byEmployee);
+            return NoContent();
+        }
     }
 }
