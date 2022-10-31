@@ -1,6 +1,7 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Services
 {
     using SIPI_PRESENTEEISM.Core.Domain.Entities;
+    using SIPI_PRESENTEEISM.Core.Domain.Enums;
     using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
     using SIPI_PRESENTEEISM.Core.Services.Interfaces;
@@ -40,7 +41,11 @@
             foreach (var image in images)
             {
                 var imageURL = await _storage.UploadStream(image, Guid.Parse(userId));
-                employee.ImagesToIdentify.Add(imageURL);
+                employee.ImagesToIdentify.Add(new ImageToIdentify()
+                {
+                    Employee = employee,
+                    ImageURL = imageURL
+                });
             }
 
             await _stamentRepository.SaveChanges();

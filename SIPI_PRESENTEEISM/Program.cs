@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using SIPI_PRESENTEEISM.Core.Domain.Services;
+using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
 using SIPI_PRESENTEEISM.Core.Helpers.Middleware;
 using SIPI_PRESENTEEISM.Core.Integrations.Azure;
 using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
@@ -31,6 +33,7 @@ services.AddSwaggerGen();
 // Singletons for Injection Dependencies
 // Services
 services.AddScoped<ICognitiveService, CognitiveService>();
+services.AddScoped<IEmployeeService, EmployeeService>();
 
 // Repositories
 services.AddScoped<IStamentRepository, StamentRepository>();
@@ -38,6 +41,7 @@ services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 // Integrations
 services.AddScoped<IFaceRecognition, AzureFaceRecognition>();
+services.AddScoped<IStorage, AzureStorage>();
 
 services.AddEndpointsApiExplorer();
 
@@ -65,11 +69,10 @@ services.AddCors(options =>
 {
     options.AddPolicy("_AllowOriginDev", builder =>
     {
-        builder.WithOrigins("*")
+        builder.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("Content-Disposition")
-                .AllowCredentials();
+                .WithExposedHeaders("Content-Disposition");
     });   
 });
 
@@ -79,12 +82,13 @@ var environment = app.Environment;
 app.UseMiddleware<ExceptionHandler>();
 
 // Configure the HTTP request pipeline.
-// Configure the HTTP request pipeline.
 if (environment.IsDevelopment() || environment.IsEnvironment("Local"))
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SIPI Authorization"); });
-    app.UseCors("_AllowOriginDev");
+    app.UseSwaggerUI(c => {
+        c.RoutePrefix = "api/docs";
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SIPI Authorization");
+    }); app.UseCors("_AllowOriginDev");
 }
 else if (environment.IsProduction())
 {
