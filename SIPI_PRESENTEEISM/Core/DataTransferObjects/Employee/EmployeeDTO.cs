@@ -31,7 +31,9 @@
                 Latitude = entity.Zone.Latitude,
                 Longitude = entity.Zone.Longitude
             };
-            ImagesToIdentify = entity.ImagesToIdentify;
+            ImagesToIdentify = entity.ImagesToIdentify
+                .Select(image => image.ImageURL)
+                .ToList();
         }
     }
 }

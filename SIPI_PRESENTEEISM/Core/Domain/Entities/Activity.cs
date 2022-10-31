@@ -6,7 +6,7 @@
     public class Activity
     {
         [ForeignKey("Employee")]
-        public int EmployeeId { get; set; }
+        public Guid EmployeeId { get; set; }
         public Employee Employee { get; set; }
 
         public double Latitude { get; set; }

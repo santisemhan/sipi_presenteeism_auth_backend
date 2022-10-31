@@ -35,8 +35,10 @@
 
             // Clustered Key
             modelBuilder.Entity<Activity>()
-                .HasIndex(b => new { b.EmployeeId, b.TimeStamp })
-                .IsUnique();
+                .HasKey(b => new { b.EmployeeId, b.TimeStamp });
+
+            modelBuilder.Entity<ImageToIdentify>()
+                .HasKey(b => new { b.EmployeeId, b.ImageURL });
         }
     }
 }

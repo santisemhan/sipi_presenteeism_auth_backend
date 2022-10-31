@@ -19,13 +19,13 @@
         public string Email { get; set; }
 
         [ForeignKey("Zone")]
-        public int ZoneId { get; set; }
+        public Guid ZoneId { get; set; }
         public Zone Zone { get; set; }
 
         public int ValidationCode { get; set; }
 
         public EmployeeState State { get; set; }
 
-        public List<string> ImagesToIdentify { get; set; }
+        public List<ImageToIdentify> ImagesToIdentify { get; set; }
     }
 }

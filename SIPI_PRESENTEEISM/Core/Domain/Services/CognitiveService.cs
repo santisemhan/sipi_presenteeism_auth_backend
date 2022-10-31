@@ -41,7 +41,11 @@
             foreach (var image in images)
             {
                 var imageURL = await _storage.UploadStream(image, Guid.Parse(userId));
-                employee.ImagesToIdentify.Add(imageURL);
+                employee.ImagesToIdentify.Add(new ImageToIdentify()
+                {
+                    Employee = employee,
+                    ImageURL = imageURL
+                });
             }
 
             await _stamentRepository.SaveChanges();
