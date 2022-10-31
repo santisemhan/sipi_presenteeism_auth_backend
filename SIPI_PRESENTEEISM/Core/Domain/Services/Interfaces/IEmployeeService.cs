@@ -10,5 +10,7 @@
         Task<EmployeeDTO> GetEmployee(Guid userId);
 
         Task<List<EmployeeToListDTO>> GetAllEmployees();
+
+        Task ValidateEmployee(Guid userId, bool byEmployee);
     }
 }
