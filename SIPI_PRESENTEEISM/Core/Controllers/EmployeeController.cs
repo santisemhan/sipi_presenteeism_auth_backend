@@ -31,7 +31,8 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployee(string userId)
+        [Route("{userId}")]
+        public async Task<IActionResult> GetEmployee([FromRoute] string userId)
         {
             var result = await _employeeService.GetEmployee(Guid.Parse(userId));
             return Ok(result);
