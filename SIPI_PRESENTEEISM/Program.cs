@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using SIPI_PRESENTEEISM.Core.Domain.Services;
+using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
 using SIPI_PRESENTEEISM.Core.Helpers.Middleware;
 using SIPI_PRESENTEEISM.Core.Integrations.Azure;
 using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
@@ -31,6 +33,7 @@ services.AddSwaggerGen();
 // Singletons for Injection Dependencies
 // Services
 services.AddScoped<ICognitiveService, CognitiveService>();
+services.AddScoped<IEmployeeService, EmployeeService>();
 
 // Repositories
 services.AddScoped<IStamentRepository, StamentRepository>();
