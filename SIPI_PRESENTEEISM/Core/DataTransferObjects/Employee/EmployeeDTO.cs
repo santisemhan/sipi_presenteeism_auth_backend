@@ -1,6 +1,7 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee
 {
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
+    using SIPI_PRESENTEEISM.Core.Domain.Enums;
 
     public class EmployeeDTO
     {
@@ -15,6 +16,10 @@
         public ZoneDTO Zone { get; set; }
 
         public List<string> ImagesToIdentify { get; set; }
+
+        public int ValidationCode { get; set; }
+
+        public EmployeeState State { get; set; }
 
         public EmployeeDTO() { }
 
@@ -34,6 +39,8 @@
             ImagesToIdentify = entity.ImagesToIdentify?
                 .Select(image => image.ImageURL)
                 .ToList();
+            ValidationCode = entity.ValidationCode;
+            State = entity.State;
         }
     }
 }
