@@ -26,6 +26,8 @@
         public async Task<Employee?> FindEmployee(Expression<Func<Employee, bool>> expression)
         {
             return await _dbContext.Employee
+                .Include(e => e.Zone)
+                .Include(e => e.ImagesToIdentify)
                 .FirstOrDefaultAsync(expression);
         }
 

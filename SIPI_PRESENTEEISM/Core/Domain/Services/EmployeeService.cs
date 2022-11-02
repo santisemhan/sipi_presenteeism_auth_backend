@@ -24,7 +24,7 @@
             {
                 Name = info.Name,
                 LastName = info.LastName,
-                Email = info.LastName,
+                Email = info.Email,
                 Zone = new Zone()
                 {
                     Name = info.Zone.Name,
