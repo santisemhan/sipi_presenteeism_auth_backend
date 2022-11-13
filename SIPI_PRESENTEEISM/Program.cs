@@ -42,6 +42,7 @@ services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 // Integrations
 services.AddScoped<IFaceRecognition, AzureFaceRecognition>();
 services.AddScoped<IStorage, AzureStorage>();
+services.AddScoped<IMail, SIPI_PRESENTEEISM.Core.Integrations.Mailing.Mailjet>();
 
 services.AddEndpointsApiExplorer();
 

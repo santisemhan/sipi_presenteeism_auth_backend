@@ -1,9 +1,11 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Domain.Services
 {
+    using Newtonsoft.Json.Linq;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
     using SIPI_PRESENTEEISM.Core.Domain.Entities;
     using SIPI_PRESENTEEISM.Core.Domain.Enums;
     using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
+    using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
     using System.Threading.Tasks;
 
@@ -12,10 +14,13 @@
         private readonly IStamentRepository _stamentRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeService(IStamentRepository stamentRepository, IEmployeeRepository employeeRepository)
+        private readonly IMail _mailing;
+
+        public EmployeeService(IStamentRepository stamentRepository, IEmployeeRepository employeeRepository, IMail mailing)
         {
             _stamentRepository = stamentRepository;
             _employeeRepository = employeeRepository;
+            _mailing = mailing;
         }
 
         public async Task<Guid> CreateEmployee(EmployeeCreateDTO info)
@@ -33,11 +38,16 @@
                     Longitude = info.Zone.Longitude
                 },
                 ValidationCode = new Random().Next(11111, 99999),
-                State = Enums.EmployeeState.To_Employee_Validation
+                State = EmployeeState.To_Employee_Validation
             };
 
             await _employeeRepository.Add(employee);
             await _stamentRepository.SaveChanges();
+
+            await _mailing.SendEmail(new JArray { new JObject { {"Email", info.Email } } }, "CODIGO DE VALIDACION DE CUENTA - SIPI UADE",
+                 "Ingresá el código en la aplicacion para completar el proceso de registro de tu cuenta",
+                 $"<h3>Tu codigo de validacion es {employee.ValidationCode}</h3>");
+
             return employee.Id;
         }
 
