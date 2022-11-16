@@ -19,10 +19,7 @@
         [Route("add")]
         public async Task<IActionResult> AddToConginiteStorage([FromForm] AddToCognitiveStorageDTO info)
         {
-            var images = new List<Stream>();
-            info.Files.ForEach(file => images.Add(file.OpenReadStream()));
-
-            await _cognitiveService.AddToCongniteStorage(info.UserId, images);
+            await _cognitiveService.AddToCongniteStorage(info.UserId, info.Files);
             return NoContent();
         }
     }
