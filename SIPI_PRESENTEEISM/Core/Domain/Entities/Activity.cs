@@ -1,5 +1,6 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Domain.Entities
 {
+    using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
     using SIPI_PRESENTEEISM.Core.Domain.Enums;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,13 @@
 
         public ActivityType ActivityType { get; set; }
 
+        public string ImageURL { get; set; }
+
         public DateTime TimeStamp { get; }
+
+        public ViewActivityDTO ToDto()
+        {
+            return new ViewActivityDTO(this);
+        }
     }
 }

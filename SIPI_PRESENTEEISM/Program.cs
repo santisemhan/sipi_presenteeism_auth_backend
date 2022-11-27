@@ -34,10 +34,12 @@ services.AddSwaggerGen();
 // Services
 services.AddScoped<ICognitiveService, CognitiveService>();
 services.AddScoped<IEmployeeService, EmployeeService>();
+services.AddScoped<IActivityService, ActivityService>();
 
 // Repositories
 services.AddScoped<IStamentRepository, StamentRepository>();
 services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+services.AddScoped<IActivityRepository, ActivityRepository>();
 
 // Integrations
 services.AddScoped<IFaceRecognition, AzureFaceRecognition>();
