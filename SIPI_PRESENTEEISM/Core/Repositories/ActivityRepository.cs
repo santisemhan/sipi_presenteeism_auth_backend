@@ -40,6 +40,7 @@
         public async Task<List<ViewActivityDTO>> GetActivitiesAsync()
         {
             return (await _dataContext.Activity
+                .Include(a => a.Employee)
                 .ToListAsync())
                 .Select(a => a.ToDto())
                 .ToList();

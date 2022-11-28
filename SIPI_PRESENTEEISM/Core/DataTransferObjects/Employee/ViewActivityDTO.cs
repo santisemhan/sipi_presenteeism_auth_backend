@@ -5,7 +5,7 @@
 
     public class ViewActivityDTO
     {
-        public Guid EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
 
         public double Latitude { get; set; }
 
@@ -14,6 +14,8 @@
         public ActivityType ActivityType { get; set; }
 
         public string ImageURL { get; set; }
+
+        public string Adress { get; set; }
 
         public DateTime TimeStamp { get; set; }
 
@@ -24,7 +26,8 @@
 
         public ViewActivityDTO(Activity activity)
         {
-            EmployeeId = activity.EmployeeId;
+            EmployeeName = activity.Employee.Name;
+            Adress = activity.Adress;
             Latitude = activity.Latitude;
             Longitude = activity.Longitude;
             ActivityType = activity.ActivityType;
