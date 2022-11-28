@@ -7,5 +7,7 @@
         Task CreateActivityAsync(ActivityDTO activity);
 
         Task<List<ViewActivityDTO>> GetActivitiesAsync();
+
+        Task<MemoryStream> DownloadActivityReport();
     }
 }

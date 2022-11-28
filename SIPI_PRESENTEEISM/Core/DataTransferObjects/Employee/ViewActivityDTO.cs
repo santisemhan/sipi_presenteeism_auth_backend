@@ -26,7 +26,7 @@
 
         public ViewActivityDTO(Activity activity)
         {
-            EmployeeName = activity.Employee.Name;
+            EmployeeName = $"{activity.Employee.Name} {activity.Employee.LastName}";
             Adress = activity.Adress;
             Latitude = activity.Latitude;
             Longitude = activity.Longitude;
