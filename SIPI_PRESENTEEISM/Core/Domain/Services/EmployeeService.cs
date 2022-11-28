@@ -1,4 +1,11 @@
-﻿namespace SIPI_PRESENTEEISM.Core.Domain.Services
+﻿using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
+using SIPI_PRESENTEEISM.Core.Domain.Entities;
+using SIPI_PRESENTEEISM.Core.Domain.Enums;
+using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
+using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
+using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
+
+namespace SIPI_PRESENTEEISM.Core.Domain.Services
 {
     using Newtonsoft.Json.Linq;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
@@ -92,6 +99,26 @@
                 throw new Exception("Employee not found");
 
             employee.State = byEmployee ? EmployeeState.To_Admin_Validation : EmployeeState.Validated;
+        }
+
+        public async Task<bool> ValidateZone(Guid employeId, ZoneDTO zone)
+        {
+            var employee = await _employeeRepository.FindEmployee(e => e.Id == employeId);
+
+            if (employee == null)
+                throw new Exception("Employee not found");
+
+            var latToValidate = zone.Latitude/57.29577951;
+            var lngToValidate = zone.Longitude / 57.29577951;
+            var latZone = employee.Zone.Latitude/ 57.29577951;
+            var lngZone = employee.Zone.Longitude/57.29577951;
+
+            var distance = 6378.8 * Math.Acos(Math.Sin(latToValidate) * Math.Sin(latZone) + Math.Cos(latToValidate) * Math.Cos(latZone) * Math.Cos(lngZone - lngToValidate));
+
+            if (distance > 0.5)
+                throw new Exception("El empleado no se encuentra en la zona de trabajo");
+
+            return true;
         }
     }
 }

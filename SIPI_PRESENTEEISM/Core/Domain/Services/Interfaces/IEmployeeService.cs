@@ -1,6 +1,7 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces
 {
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
+    using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
 
     public interface IEmployeeService
     {
@@ -12,5 +13,7 @@
         Task<List<EmployeeToListDTO>> GetAllEmployees();
 
         Task ValidateEmployee(Guid userId, bool byEmployee);
+
+        Task<bool> ValidateZone(Guid employeeId, ZoneDTO zone);
     }
 }
