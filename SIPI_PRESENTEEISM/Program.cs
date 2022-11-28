@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SIPI_PRESENTEEISM.Core.Domain.Services;
 using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
 using SIPI_PRESENTEEISM.Core.Helpers.Middleware;
+using SIPI_PRESENTEEISM.Core.Integrations.ARSA;
 using SIPI_PRESENTEEISM.Core.Integrations.Azure;
 using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
 using SIPI_PRESENTEEISM.Core.Repositories;
@@ -42,7 +43,7 @@ services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 services.AddScoped<IActivityRepository, ActivityRepository>();
 
 // Integrations
-services.AddScoped<IFaceRecognition, AzureFaceRecognition>();
+services.AddScoped<IFaceRecognition, ARSAFaceRecognition>();
 services.AddScoped<IStorage, AzureStorage>();
 services.AddScoped<IMail, SIPI_PRESENTEEISM.Core.Integrations.Mailing.Mailjet>();
 

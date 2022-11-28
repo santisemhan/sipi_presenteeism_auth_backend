@@ -22,5 +22,13 @@
             await _cognitiveService.AddToCongniteStorage(info.UserId, info.Files);
             return NoContent();
         }
+
+        [HttpPost]
+        [Route("identify")]
+        public async Task<IActionResult> IdentifyUser([FromForm] IdentifyDTO info)
+        {
+            var userId = await _cognitiveService.IdentifyUser(info);
+            return Ok(userId);
+        }
     }
 }

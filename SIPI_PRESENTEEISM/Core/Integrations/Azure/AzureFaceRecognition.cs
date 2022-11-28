@@ -61,38 +61,44 @@
             await client.PersonGroup.TrainAsync(personGroup.PersonGroupId);
         }
 
-        public async Task<bool> Identify(Guid userId, Stream image)
+        public async Task<Guid?> Identify(string imageURL)
         {
-            var detectedFaces = await client.Face.DetectWithStreamAsync(image,
-                recognitionModel: RecognitionModel.Recognition04,
-                detectionModel: DetectionModel.Detection03,
-                returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.QualityForRecognition });
+            //var detectedFaces = await client.Face.DetectWithStreamAsync(image,
+            //    recognitionModel: RecognitionModel.Recognition04,
+            //    detectionModel: DetectionModel.Detection03,
+            //    returnFaceAttributes: new List<FaceAttributeType> { FaceAttributeType.QualityForRecognition });
 
-            if (detectedFaces.Count == 0)
-                throw new Exception("Some image not have a less one face");
+            //if (detectedFaces.Count == 0)
+            //    throw new Exception("Some image not have a less one face");
 
-            if (detectedFaces.Count > 1)
-                throw new Exception("Some image have two or more faces");
+            //if (detectedFaces.Count > 1)
+            //    throw new Exception("Some image have two or more faces");
 
-            var face = detectedFaces.First();
-            if (face.FaceAttributes.QualityForRecognition.Value == QualityForRecognition.Low)
-                throw new Exception("Some image have low quality");
+            //var face = detectedFaces.First();
+            //if (face.FaceAttributes.QualityForRecognition.Value == QualityForRecognition.Low)
+            //    throw new Exception("Some image have low quality");
 
-            var identifyResults = await client.Face.IdentifyAsync(new List<Guid>() { face.FaceId.Value }, PersonGroupId);
+            //var identifyResults = await client.Face.IdentifyAsync(new List<Guid>() { face.FaceId.Value }, PersonGroupId);
 
-            foreach (var identifyResult in identifyResults)
-            {
-                if (identifyResult.Candidates.Count == 0)
-                    continue;
+            //foreach (var identifyResult in identifyResults)
+            //{
+            //    if (identifyResult.Candidates.Count == 0)
+            //        continue;
 
-                var person = await client.PersonGroupPerson.GetAsync(PersonGroupId, identifyResult.Candidates[0].PersonId);
-                if (identifyResult.Candidates.Any(c => c.PersonId == userId && c.Confidence >= 50))
-                {
-                    return true;
-                }
-            }
+            //    var person = await client.PersonGroupPerson.GetAsync(PersonGroupId, identifyResult.Candidates[0].PersonId);
+            //    if (identifyResult.Candidates.Any(c => c.PersonId == userId && c.Confidence >= 50))
+            //    {
+            //        return true;
+            //    }
+            //}
 
-            return false;
+            //return false;
+            throw new NotImplementedException();
+        }
+
+        public Task AddPerson(Guid guid, List<string> imagesURL)
+        {
+            throw new NotImplementedException();
         }
     }
 }

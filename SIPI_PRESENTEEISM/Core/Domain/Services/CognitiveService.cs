@@ -1,15 +1,14 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Services
 {
+    using SIPI_PRESENTEEISM.Core.DataTransferObjects.Cognitive;
     using SIPI_PRESENTEEISM.Core.Domain.Entities;
     using SIPI_PRESENTEEISM.Core.Domain.Enums;
     using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
     using SIPI_PRESENTEEISM.Core.Services.Interfaces;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Net;
-    using System.Runtime;
     using System.Threading.Tasks;
+    using static System.Net.Mime.MediaTypeNames;
 
     public class CognitiveService : ICognitiveService
     {
@@ -36,10 +35,9 @@
             if (employee == null)
                 throw new Exception("Employee not found");
 
-            //await _faceRecognition.AddPerson(Guid.Parse(userId), images);
-
             employee.State = EmployeeState.To_Admin_Validation;
 
+            var imagesURL = new List<string>();
             foreach (var image in images)
             {
                 IList<string> allowedFileExtensions = new List<string> { ".jpeg", ".jpg", ".png" };
@@ -54,14 +52,27 @@
                     Employee = employee,
                     ImageURL = imageURL
                 });
+
+                imagesURL.Add(imageURL);
             }
+
+            await _faceRecognition.AddPerson(Guid.Parse(userId), imagesURL);
 
             await _stamentRepository.SaveChanges();
         }
 
-        public async Task<bool> IdentifyUser(string userId, Stream image)
-        {         
-            return await _faceRecognition.Identify(Guid.Parse(userId), image);
+        public async Task<Guid?> IdentifyUser(IdentifyDTO info)
+        {
+            var image = info.File;
+
+            IList<string> allowedFileExtensions = new List<string> { ".jpeg", ".jpg", ".png" };
+            var extension = image.FileName.Substring(image.FileName.LastIndexOf('.')).ToLower();
+
+            if (!allowedFileExtensions.Contains(extension.ToString()))
+                throw new Exception("Format not valid");
+
+            var imageURL = await _storage.UploadStream(image.OpenReadStream(), $"{Guid.NewGuid()}{extension}");
+            return await _faceRecognition.Identify(imageURL);
         }
     }
 }

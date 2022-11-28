@@ -4,6 +4,8 @@
     {
         Task AddPerson(Guid userId, List<Stream> images);
 
-        Task<bool> Identify(Guid userId, Stream image);
+        Task AddPerson(Guid userId, List<string> imagesURL);
+
+        Task<Guid?> Identify(string imageURL);
     }
 }
