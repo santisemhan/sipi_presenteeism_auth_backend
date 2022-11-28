@@ -31,7 +31,8 @@
                 Latitude = activity.Latitude,
                 Longitude = activity.Longitude,
                 ActivityType = ActivityType.CheckIn, // Por ahora no diferenciamos si es Out/In
-                ImageURL = url
+                ImageURL = url,
+                Adress = activity.Adress
             });
             await _stamentRepository.SaveChanges();
         }

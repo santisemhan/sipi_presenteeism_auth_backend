@@ -1,10 +1,10 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee
 {
-    using SIPI_PRESENTEEISM.Core.Domain.Enums;
-
     public class ActivityDTO
     {
         public Guid EmployeeId { get; set; }
+
+        public string Adress { get; set; }
 
         public double Latitude { get; set; }
 

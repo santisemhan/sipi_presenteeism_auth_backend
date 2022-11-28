@@ -1,8 +1,8 @@
-﻿namespace SIPI_PRESENTEEISM.Core.DataTransferObjects.Cognitive
+﻿namespace SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class AddToCognitiveStorageDTO
+    public class UploadRegistrationDTO
     {
         [Required]
         public string UserId { get; set; }

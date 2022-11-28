@@ -9,19 +9,24 @@
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
     using System.Threading.Tasks;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
+    using SIPI_PRESENTEEISM.Core.Services.Interfaces;
 
     public class EmployeeService : IEmployeeService
     {
         private readonly IStamentRepository _stamentRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICognitiveService _cognitiveService;
 
         private readonly IMail _mailing;
+        private readonly IStorage _storage;
 
-        public EmployeeService(IStamentRepository stamentRepository, IEmployeeRepository employeeRepository, IMail mailing)
+        public EmployeeService(IStamentRepository stamentRepository, IEmployeeRepository employeeRepository, ICognitiveService cognitiveService, IMail mailing, IStorage storage)
         {
             _stamentRepository = stamentRepository;
             _employeeRepository = employeeRepository;
+            _cognitiveService = cognitiveService;
             _mailing = mailing;
+            _storage = storage;
         }
 
         public async Task<Guid> CreateEmployee(EmployeeCreateDTO info)
@@ -56,7 +61,7 @@
         {
             // BUG: Puede ser que multiples empleados tengan el mismo codigo de validacion
             var employee = await _employeeRepository
-                .FindEmployee(e => e.ValidationCode == validationCode && e.State == Enums.EmployeeState.To_Employee_Validation);
+                .FindEmployee(e => e.ValidationCode == validationCode && e.State == EmployeeState.To_Employee_Validation);
 
             if (employee == null)
                 throw new Exception("Employee not found");
@@ -93,9 +98,15 @@
                 throw new Exception("Employee not found");
 
             employee.State = byEmployee ? EmployeeState.To_Admin_Validation : EmployeeState.Validated;
+            await _stamentRepository.SaveChanges();
+
+            if (!byEmployee)
+            {
+                await _cognitiveService.AddToCongniteStorage(userId);
+            }
         }
 
-        public async Task<bool> ValidateZone(Guid employeId, ZoneDTO zone)
+        public async Task<bool> ValidateZone(Guid employeId, ValidateLocationDTO zone)
         {
             var TO_RADIAN = 57.29577951; // 180 / π (pi)
             var TO_KM = 6378.8;
@@ -116,6 +127,35 @@
                 throw new Exception("El empleado no se encuentra en la zona de trabajo");
 
             return true;
+        }
+
+        public async Task UploadRegistrationByEmployee(UploadRegistrationDTO info)
+        {
+            var employee = await _employeeRepository
+                .FindEmployee(e => e.Id == Guid.Parse(info.UserId) && e.State == EmployeeState.To_Employee_Validation);
+
+            if (employee == null)
+                throw new Exception("Employee not found");
+
+            employee.State = EmployeeState.To_Admin_Validation;
+
+            foreach (var image in info.Files)
+            {
+                IList<string> allowedFileExtensions = new List<string> { ".jpeg", ".jpg", ".png" };
+                var extension = image.FileName.Substring(image.FileName.LastIndexOf('.')).ToLower();
+
+                if (!allowedFileExtensions.Contains(extension.ToString()))
+                    throw new Exception("Format not valid");
+
+                var imageURL = await _storage.UploadStream(image.OpenReadStream(), $"{Guid.NewGuid()}{extension}");
+                employee.ImagesToIdentify.Add(new ImageToIdentify()
+                {
+                    Employee = employee,
+                    ImageURL = imageURL
+                });
+            }
+
+            await _stamentRepository.SaveChanges();
         }
     }
 }

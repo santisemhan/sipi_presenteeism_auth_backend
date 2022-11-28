@@ -1,7 +1,5 @@
 ﻿namespace SIPI_PRESENTEEISM.Core.Integrations.ARSA
 {
-    using Mailjet.Client.Resources;
-    using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
     using Newtonsoft.Json;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Cognitive;
     using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
@@ -30,7 +28,7 @@
             // TODO: Arreglar: sacamos 3 fotos y guardamos solo la primera y la ultima
             var content = JsonConvert.SerializeObject(new {
                 face_image_url = imagesURL.First(),
-                additional_face_image_0_url = imagesURL.Last(),
+                additional_face_image_0_url = imagesURL.Last()
             });
 
             var request = new HttpRequestMessage()
@@ -84,7 +82,8 @@
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            var body = JsonConvert.DeserializeObject<ARSAIdentifyDTO>(await request.Content.ReadAsStringAsync());
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var body = JsonConvert.DeserializeObject<ARSAIdentifyDTO>(responseContent);
 
             if (body == null || body.Status != "success")
                 throw new Exception("Is not possible identify the person");
@@ -92,8 +91,8 @@
             if (body.Recognition_Result.Count > 1)
                 throw new Exception("Multiple faces in the photo");
 
-            if (!body.Recognition_Result.First().Liveness.Is_Real_Face)
-                throw new Exception("The face is not real");
+            //if (!body.Recognition_Result.First().Liveness.Is_Real_Face)
+            //    throw new Exception("The face is not real");
 
             return Guid.Parse(body.Recognition_Result.First().Recognition_Uidresult);
         }

@@ -18,6 +18,8 @@
 
         public string ImageURL { get; set; }
 
+        public string Adress { get; set; }
+
         public DateTime TimeStamp { get; }
 
         public ViewActivityDTO ToDto()

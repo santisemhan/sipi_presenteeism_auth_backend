@@ -14,6 +14,8 @@
 
         Task ValidateEmployee(Guid userId, bool byEmployee);
 
-        Task<bool> ValidateZone(Guid employeeId, ZoneDTO zone);
+        Task<bool> ValidateZone(Guid employeeId, ValidateLocationDTO zone);
+
+        Task UploadRegistrationByEmployee(UploadRegistrationDTO info);
     }
 }

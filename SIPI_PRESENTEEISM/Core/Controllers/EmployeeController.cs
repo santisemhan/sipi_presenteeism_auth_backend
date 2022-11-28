@@ -57,9 +57,17 @@
 
         [HttpPost]
         [Route("validate-zone/{employeeId}")]
-        public async Task<IActionResult> ValidateZone([FromRoute]Guid employeeId,[FromBody] ZoneDTO zone)
+        public async Task<IActionResult> ValidateZone([FromRoute]Guid employeeId,[FromBody] ValidateLocationDTO zone)
         {
             await _employeeService.ValidateZone(employeeId, zone);
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("registration/upload")]
+        public async Task<IActionResult> UploadRegistrationByEmployee([FromForm] UploadRegistrationDTO info)
+        {
+            await _employeeService.UploadRegistrationByEmployee(info);
             return NoContent();
         }
     }

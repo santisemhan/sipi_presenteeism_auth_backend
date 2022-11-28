@@ -4,7 +4,7 @@
 
     public interface ICognitiveService
     {
-        Task AddToCongniteStorage(string userId, List<IFormFile> images);
+        Task AddToCongniteStorage(Guid userId);
 
         Task<Guid?> IdentifyUser(IdentifyDTO info);
     }

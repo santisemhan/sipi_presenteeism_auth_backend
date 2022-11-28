@@ -16,14 +16,6 @@
         }
 
         [HttpPost]
-        [Route("add")]
-        public async Task<IActionResult> AddToConginiteStorage([FromForm] AddToCognitiveStorageDTO info)
-        {
-            await _cognitiveService.AddToCongniteStorage(info.UserId, info.Files);
-            return NoContent();
-        }
-
-        [HttpPost]
         [Route("identify")]
         public async Task<IActionResult> IdentifyUser([FromForm] IdentifyDTO info)
         {
