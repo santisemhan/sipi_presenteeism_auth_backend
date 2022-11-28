@@ -8,7 +8,6 @@
     using SIPI_PRESENTEEISM.Core.Services.Interfaces;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using static System.Net.Mime.MediaTypeNames;
 
     public class CognitiveService : ICognitiveService
     {

@@ -6,6 +6,6 @@
     {
         Task AddToCongniteStorage(string userId, List<IFormFile> images);
 
-        Task<bool> IdentifyUser(IdentifyDTO info);
+        Task<Guid?> IdentifyUser(IdentifyDTO info);
     }
 }

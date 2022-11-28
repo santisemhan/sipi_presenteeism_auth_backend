@@ -1,11 +1,4 @@
-﻿using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
-using SIPI_PRESENTEEISM.Core.Domain.Entities;
-using SIPI_PRESENTEEISM.Core.Domain.Enums;
-using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
-using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
-using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
-
-namespace SIPI_PRESENTEEISM.Core.Domain.Services
+﻿namespace SIPI_PRESENTEEISM.Core.Domain.Services
 {
     using Newtonsoft.Json.Linq;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
@@ -15,6 +8,8 @@ namespace SIPI_PRESENTEEISM.Core.Domain.Services
     using SIPI_PRESENTEEISM.Core.Integrations.Interfaces;
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
     using System.Threading.Tasks;
+    using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
+
 
     public class EmployeeService : IEmployeeService
     {
