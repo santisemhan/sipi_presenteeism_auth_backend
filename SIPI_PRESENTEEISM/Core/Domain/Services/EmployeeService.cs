@@ -10,7 +10,6 @@
     using System.Threading.Tasks;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
 
-
     public class EmployeeService : IEmployeeService
     {
         private readonly IStamentRepository _stamentRepository;
@@ -98,19 +97,22 @@
 
         public async Task<bool> ValidateZone(Guid employeId, ZoneDTO zone)
         {
+            var TO_RADIAN = 57.29577951; // 180 / π (pi)
+            var TO_KM = 6378.8;
+
             var employee = await _employeeRepository.FindEmployee(e => e.Id == employeId);
 
             if (employee == null)
                 throw new Exception("Employee not found");
 
-            var latToValidate = zone.Latitude/57.29577951;
-            var lngToValidate = zone.Longitude / 57.29577951;
-            var latZone = employee.Zone.Latitude/ 57.29577951;
-            var lngZone = employee.Zone.Longitude/57.29577951;
+            var latToValidate = zone.Latitude / TO_RADIAN;
+            var lngToValidate = zone.Longitude / TO_RADIAN;
+            var latZone = employee.Zone.Latitude / TO_RADIAN;
+            var lngZone = employee.Zone.Longitude / TO_RADIAN;
 
-            var distance = 6378.8 * Math.Acos(Math.Sin(latToValidate) * Math.Sin(latZone) + Math.Cos(latToValidate) * Math.Cos(latZone) * Math.Cos(lngZone - lngToValidate));
+            var distance = TO_KM * Math.Acos(Math.Sin(latToValidate) * Math.Sin(latZone) + Math.Cos(latToValidate) * Math.Cos(latZone) * Math.Cos(lngZone - lngToValidate));
 
-            if (distance > 0.5)
+            if (distance > employee.Zone.RadioKm)
                 throw new Exception("El empleado no se encuentra en la zona de trabajo");
 
             return true;

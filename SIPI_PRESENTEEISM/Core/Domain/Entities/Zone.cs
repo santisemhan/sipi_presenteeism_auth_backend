@@ -1,4 +1,4 @@
-﻿    namespace SIPI_PRESENTEEISM.Core.Domain.Entities
+﻿namespace SIPI_PRESENTEEISM.Core.Domain.Entities
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
