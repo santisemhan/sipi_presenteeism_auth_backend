@@ -5,6 +5,6 @@
         To_Employee_Validation,
         To_Admin_Validation,
         Validated,
-        Blocked
+        Blocked 
     }
 }

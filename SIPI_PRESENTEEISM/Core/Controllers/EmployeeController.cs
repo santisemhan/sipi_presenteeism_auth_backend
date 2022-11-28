@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
+    using SIPI_PRESENTEEISM.Core.DataTransferObjects.Zone;
     using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
 
     [Route("api/[controller]")]
@@ -47,10 +48,18 @@
         }
 
         [HttpPost]
-        [Route("validate")]
-        public async Task<IActionResult> ValidateEmployee(Guid userId, bool byEmployee)
+        [Route("validate/{userId}/{byEmployee}")]
+        public async Task<IActionResult> ValidateEmployee([FromRoute]Guid userId,[FromRoute] bool byEmployee)
         {
             await _employeeService.ValidateEmployee(userId, byEmployee);
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("validate-zone/{employeeId}")]
+        public async Task<IActionResult> ValidateZone([FromRoute]Guid employeeId,[FromBody] ZoneDTO zone)
+        {
+            await _employeeService.ValidateZone(employeeId, zone);
             return NoContent();
         }
     }
