@@ -45,5 +45,15 @@
                 .Select(a => a.ToDto())
                 .ToList();
         }
+
+        public async Task<List<ViewActivityDTO>> GetActivitiesByUser(Guid userId)
+        {
+            return (await _dataContext.Activity
+                .Include(a => a.Employee)
+                .Where(u => u.EmployeeId == userId)
+                .ToListAsync())
+                .Select(a => a.ToDto())
+                .ToList();
+        }
     }
 }

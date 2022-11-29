@@ -31,6 +31,14 @@
         }
 
         [HttpGet]
+        [Route("{userId}")]
+        public async Task<IActionResult> DownloadActivities([FromRoute] Guid userId)
+        {
+            var result = await _activityService.GetActivitiesByUser(userId);
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("download")]
         public async Task<IActionResult> DownloadActivities()
         {

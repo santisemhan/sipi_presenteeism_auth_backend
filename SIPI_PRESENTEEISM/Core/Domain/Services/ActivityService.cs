@@ -4,6 +4,7 @@
     using SIPI_PRESENTEEISM.Core.DataTransferObjects.Employee;
     using SIPI_PRESENTEEISM.Core.Domain.Services.Interfaces;
     using SIPI_PRESENTEEISM.Core.Repositories.Interfaces;
+    using System;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -61,6 +62,11 @@
         public async Task<List<ViewActivityDTO>> GetActivitiesAsync()
         {
             return await _activityRepository.GetActivitiesAsync();
+        }
+
+        public async Task<List<ViewActivityDTO>> GetActivitiesByUser(Guid userId)
+        {
+            return await _activityRepository.GetActivitiesByUser(userId);
         }
     }
 }
