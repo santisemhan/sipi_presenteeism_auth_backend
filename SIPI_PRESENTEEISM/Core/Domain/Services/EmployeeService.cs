@@ -139,6 +139,7 @@
 
             employee.State = EmployeeState.To_Admin_Validation;
 
+            int counter = 1;
             foreach (var image in info.Files)
             {
                 IList<string> allowedFileExtensions = new List<string> { ".jpeg", ".jpg", ".png" };
@@ -147,12 +148,14 @@
                 if (!allowedFileExtensions.Contains(extension.ToString()))
                     throw new Exception("Format not valid");
 
-                var imageURL = await _storage.UploadStream(image.OpenReadStream(), $"{Guid.NewGuid()}{extension}");
+                var imageURL = await _storage.UploadStream(image.OpenReadStream(), $"{employee.Name}{employee.LastName}{counter}{extension}");
                 employee.ImagesToIdentify.Add(new ImageToIdentify()
                 {
                     Employee = employee,
                     ImageURL = imageURL
                 });
+
+                counter++;
             }
 
             await _stamentRepository.SaveChanges();

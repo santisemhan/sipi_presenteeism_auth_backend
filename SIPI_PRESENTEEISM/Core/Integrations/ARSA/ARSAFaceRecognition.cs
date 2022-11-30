@@ -37,7 +37,7 @@
                 RequestUri = new Uri("https://face-recognition18.p.rapidapi.com/register_face2"),
                 Headers = {
                     { "x-face-uid", $"{userId}" },
-                    { "X-RapidAPI-Key", "e1f2c16754msh49cc6faeffe7fddp135532jsnd263af113831" },
+                    { "X-RapidAPI-Key", "6663d05f68msh8c42802fd726c6dp10ffc6jsn9e0493f14fa7" },
                     { "X-RapidAPI-Host", "face-recognition18.p.rapidapi.com" },
                 },
                 Content = new StringContent(content)
@@ -67,7 +67,7 @@
                 Method = HttpMethod.Post,
                 RequestUri = new Uri("https://face-recognition18.p.rapidapi.com/recognize_face2"),
                 Headers = {
-                    { "X-RapidAPI-Key", "e1f2c16754msh49cc6faeffe7fddp135532jsnd263af113831" },
+                    { "X-RapidAPI-Key", "6663d05f68msh8c42802fd726c6dp10ffc6jsn9e0493f14fa7" },
                     { "X-RapidAPI-Host", "face-recognition18.p.rapidapi.com" },
                 },
                 Content = new StringContent(content)
